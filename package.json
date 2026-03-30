@@ -1,0 +1,28 @@
+{
+  "name": "shipping-carrier-integration-service",
+  "version": "1.0.0",
+  "description": "Extensible shipping carrier integration service with UPS OAuth 2.0 and rate shopping",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "nock": "^13.5.4",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
