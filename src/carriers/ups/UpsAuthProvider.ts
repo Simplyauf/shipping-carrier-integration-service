@@ -91,7 +91,6 @@ export class UpsAuthProvider implements IAuthProvider {
       );
     }
 
-    // UPS returns issued_at as a Unix epoch timestamp in milliseconds (as a string)
     const issuedAtMs = parseInt(parsed.data.issued_at, 10);
     const expiresAt = issuedAtMs + parsed.data.expires_in * 1000;
 

@@ -33,12 +33,7 @@ describe("UpsAuthProvider", () => {
   });
 
   afterEach(() => {
-    // Ensure every registered nock stub was consumed — catches unused stubs
-    // which indicate the code made fewer HTTP calls than expected
-    const pending = nock.pendingMocks();
-    if (pending.length > 0) {
-      nock.cleanAll();
-    }
+    nock.cleanAll();
   });
 
   it("acquires a token on first call and returns access_token", async () => {
@@ -51,7 +46,6 @@ describe("UpsAuthProvider", () => {
   });
 
   it("serves from cache on second call (no additional HTTP request)", async () => {
-    // Only one nock stub registered — if a second HTTP call is made, nock throws
     stubUpsAuthSuccess(validTokenResponse);
     const provider = new UpsAuthProvider(testEnv);
 
@@ -59,11 +53,10 @@ describe("UpsAuthProvider", () => {
     const token2 = await provider.getAccessToken();
 
     expect(token1).toBe(token2);
-    expect(nock.pendingMocks()).toHaveLength(0); // stub was consumed exactly once
+    expect(nock.pendingMocks()).toHaveLength(0);
   });
 
   it("deduplicates concurrent token requests into a single HTTP call", async () => {
-    // Only one stub — three concurrent calls must share a single HTTP request
     stubUpsAuthSuccess(validTokenResponse);
     const provider = new UpsAuthProvider(testEnv);
 

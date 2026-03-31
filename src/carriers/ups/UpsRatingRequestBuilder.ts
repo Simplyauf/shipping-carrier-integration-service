@@ -38,7 +38,6 @@ export class UpsRatingRequestBuilder {
             Address: this.mapAddress(request.shipFrom),
           },
           Package: request.packages.map((pkg) => ({
-            // "02" = Customer Supplied Package (standard packaging type)
             PackagingType: { Code: "02" },
             PackageWeight: {
               UnitOfMeasurement: { Code: "LBS" as const },

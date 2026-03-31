@@ -62,7 +62,6 @@ describe("UpsCarrier error handling", () => {
 
     expect(err).toBeInstanceOf(CarrierError);
     expect((err as CarrierError).code).toBe("RATE_REQUEST_INVALID");
-    // The upstream UPS error message should surface in our error message
     expect((err as CarrierError).message).toContain("ShipperNumber is invalid");
     expect((err as CarrierError).retryable).toBe(false);
   });
@@ -92,7 +91,6 @@ describe("UpsCarrier error handling", () => {
   });
 
   it("transparently retries and succeeds after receiving a 401 on the rating call", async () => {
-    // Flow: auth → rating 401 → invalidate → auth again → rating success
     stubUpsRating401ThenSuccess(validTokenResponse, shopSuccessResponse);
     const carrier = new UpsCarrier(testEnv);
 
@@ -102,7 +100,6 @@ describe("UpsCarrier error handling", () => {
   });
 
   it("throws AuthFailedError if retry after 401 also returns 401", async () => {
-    // Flow: auth → rating 401 → invalidate → auth again → rating 401 again
     stubUpsRating401Twice(validTokenResponse);
     const carrier = new UpsCarrier(testEnv);
 

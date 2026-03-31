@@ -19,7 +19,6 @@ export class UpsRatingResponseMapper {
     const serviceCode = shipment.Service.Code;
     const currency = shipment.TotalCharges.CurrencyCode as CurrencyCode;
 
-    // Preserve unknown service codes with a fallback name rather than dropping them
     const serviceName =
       UPS_SERVICE_NAMES[serviceCode] ?? `UPS Service ${serviceCode}`;
 

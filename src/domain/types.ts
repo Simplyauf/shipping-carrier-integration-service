@@ -1,8 +1,3 @@
-/**
- * Core domain types shared across all carrier implementations.
- * Callers interact exclusively with these types — never with carrier-specific wire formats.
- */
-
 export type CurrencyCode = "USD" | "CAD" | "EUR" | "GBP";
 
 export interface Money {
@@ -26,7 +21,6 @@ export interface Address {
 }
 
 export interface PackageSpec {
-  /** Weight in pounds */
   weightLbs: number;
   dimensions?: {
     lengthIn: number;
@@ -38,7 +32,6 @@ export interface PackageSpec {
 export interface RateShipmentRequest {
   shipFrom: Address;
   shipTo: Address;
-  /** At least one package required */
   packages: PackageSpec[];
   /**
    * When true, requests rates for all available services (Shop).
@@ -48,11 +41,9 @@ export interface RateShipmentRequest {
 }
 
 export interface ServiceRate {
-  /** Carrier identifier, e.g. "UPS", "FEDEX" */
   carrier: string;
   /** Carrier-specific service code, e.g. "03" for UPS Ground */
   serviceCode: string;
-  /** Human-readable service name, e.g. "UPS Ground" */
   serviceName: string;
   totalCharge: Money;
   /** Estimated transit days, if provided by the carrier */

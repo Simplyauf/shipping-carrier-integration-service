@@ -95,7 +95,6 @@ export class UpsHttpClient {
       return new CarrierError("NETWORK_ERROR", "Unexpected non-Axios error", err);
     }
 
-    // Network-level errors (no response received)
     if (err.code === "ECONNABORTED" || err.code === "ETIMEDOUT") {
       return new NetworkTimeoutError(err);
     }
@@ -137,7 +136,7 @@ export class UpsHttpClient {
         `UPS server error ${status}${upsMsgs ? `: ${upsMsgs}` : ""}`,
         err,
         rawBody,
-        true // server errors are retryable
+        true
       );
     }
 

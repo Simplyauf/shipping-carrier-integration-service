@@ -41,7 +41,6 @@ export class UpsCarrier implements ICarrier {
   async getRates(request: RateShipmentRequest): Promise<RateShipmentResponse> {
     const { body, transId } = this.requestBuilder.build(request);
 
-    // Use /Shop to get all available services, /Rate for a specific service
     const requestOption = request.requestAllServices ? "Shop" : "Rate";
     const path = `/${UPS_RATING_VERSION}/${requestOption}`;
 
