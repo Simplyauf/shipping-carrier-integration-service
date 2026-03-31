@@ -19,7 +19,7 @@ import {
   multiPieceRequest,
   noDimensionsRequest,
 } from "../fixtures/ups.rating.request.fixture.js";
-import { ResponseParseError } from "../../src/domain/errors.js";
+import { ResponseParseError, CarrierError } from "../../src/domain/errors.js";
 
 const testEnv = {
   UPS_CLIENT_ID: "test-client-id",
@@ -106,6 +106,18 @@ describe("UpsCarrier.getRates — response parsing", () => {
     expect(err).toBeInstanceOf(ResponseParseError);
     expect((err as ResponseParseError).code).toBe("RESPONSE_PARSE_ERROR");
     expect((err as ResponseParseError).carrierRawError).toEqual(malformedRatingResponse);
+  });
+
+  it("throws RATE_REQUEST_INVALID before any HTTP call when input is invalid", async () => {
+    // No nock stubs registered — any HTTP call would throw an unmatched request error
+    const carrier = new UpsCarrier(testEnv);
+    const badRequest = { shipFrom: {}, shipTo: {}, packages: [] };
+
+    const err = await carrier.getRates(badRequest as never).catch((e: unknown) => e);
+
+    expect(err).toBeInstanceOf(CarrierError);
+    expect((err as CarrierError).code).toBe("RATE_REQUEST_INVALID");
+    expect(nock.pendingMocks()).toHaveLength(0); // no HTTP was attempted
   });
 });
 

@@ -1,6 +1,7 @@
 import type { ICarrier } from "../../carrier/ICarrier.js";
 import type { RateShipmentRequest, RateShipmentResponse } from "../../domain/types.js";
 import { ResponseParseError } from "../../domain/errors.js";
+import { validateRateRequest } from "../../domain/schemas.js";
 import { UpsAuthProvider } from "./UpsAuthProvider.js";
 import { UpsHttpClient } from "./UpsHttpClient.js";
 import { UpsRatingRequestBuilder } from "./UpsRatingRequestBuilder.js";
@@ -39,6 +40,7 @@ export class UpsCarrier implements ICarrier {
   }
 
   async getRates(request: RateShipmentRequest): Promise<RateShipmentResponse> {
+    validateRateRequest(request);
     const { body, transId } = this.requestBuilder.build(request);
 
     const requestOption = request.requestAllServices ? "Shop" : "Rate";

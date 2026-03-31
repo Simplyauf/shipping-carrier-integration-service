@@ -84,6 +84,23 @@ describe("UpsAuthProvider", () => {
     expect(nock.pendingMocks()).toHaveLength(0);
   });
 
+  it("refreshes token when cached token has expired (TTL elapsed)", async () => {
+    stubUpsAuthSuccess(validTokenResponse);
+    stubUpsAuthSuccess(refreshedTokenResponse);
+    const provider = new UpsAuthProvider(testEnv);
+
+    await provider.getAccessToken();
+
+    // Simulate the token having expired naturally by backdating its expiresAt
+    (provider as unknown as { cachedToken: { expiresAt: number } }).cachedToken.expiresAt =
+      Date.now() - 1;
+
+    const fresh = await provider.getAccessToken();
+
+    expect(fresh).toBe("refreshed-token-xyz789");
+    expect(nock.pendingMocks()).toHaveLength(0);
+  });
+
   it("throws AuthFailedError on HTTP 401 from auth endpoint", async () => {
     stubUpsAuthFailure(401, authUnauthorizedError);
     const provider = new UpsAuthProvider(testEnv);
